@@ -8,18 +8,68 @@ function Dashboard() {
 
   const totalTasks = task.length;
 
-const completedTasks = task.filter(
-  (task) => task.completed
-).length;
+  const completedTasks = task.filter((task) => task.completed).length;
 
-const progress =
-  totalTasks === 0
-    ? 0
-    : Math.round((completedTasks / totalTasks) * 100);
+  const progress =
+    totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
 
-const cppTasks = task.filter(
-    (task) => task.subject === "c++"
-)
+  const cppTasks = task.filter((item) => item.subject === "C++");
+  const reactTasks = task.filter((item) => item.subject === "React");
+
+  const databaseTasks = task.filter((item) => item.subject === "Database");
+
+  const networkTasks = task.filter(
+    (item) => item.subject === "Computer Network",
+  );
+  const reactCompleted = reactTasks.filter((item) => item.completed).length;
+
+  const databaseCompleted = databaseTasks.filter(
+    (item) => item.completed,
+  ).length;
+
+  const networkCompleted = networkTasks.filter((item) => item.completed).length;
+
+  const cppCompleted = cppTasks.filter((item) => item.completed).length;
+
+  const cppProgress =
+    cppTasks.length === 0
+      ? 0
+      : Math.round((cppCompleted / cppTasks.length) * 100);
+
+  const reactProgress =
+    reactTasks.length === 0
+      ? 0
+      : Math.round((reactCompleted / reactTasks.length) * 100);
+
+  const databaseProgress =
+    databaseTasks.length === 0
+      ? 0
+      : Math.round((databaseCompleted / databaseTasks.length) * 100);
+
+  const networkProgress =
+    networkTasks.length === 0
+      ? 0
+      : Math.round((networkCompleted / networkTasks.length) * 100);
+
+  function getSubjectData(subjectName) {
+    const subjectTasks = task.filter((item) => item.subject == subjectName);
+    const completed = subjectTasks.filter((item) => item.completed).length;
+
+    const progress =
+      subjectTasks.length === 0
+        ? 0
+        : Math.round((completed / subjectTasks.length) * 100);
+
+    return {
+      tasks: subjectTasks.length,
+      completed: completed,
+      progress: progress,
+    };
+  }
+  const cpp = getSubjectData("C++");
+const react = getSubjectData("React");
+const database = getSubjectData("Database");
+const network = getSubjectData("Computer Network");
   return (
     <div>
       <h1>Study Planner</h1>
@@ -42,10 +92,30 @@ const cppTasks = task.filter(
         </div>
       </div>
       <div>
-        <SubjectCard name="C++" tasks={cppTasks.length} Completed="10%" />
-        <SubjectCard name="React" tasks="2" Completed="20%" />
-        <SubjectCard name="Database" tasks="3" Completed="30%" />
-        <SubjectCard name="Computer Network" tasks="4" Completed="40%" />
+        <SubjectCard
+          name="C++"
+          tasks={cpp.tasks}
+          Completed={cpp.completed}
+          progress={cpp.progress}
+        />
+        <SubjectCard
+          name="React"
+          tasks={react.tasks}
+          Completed={react.completed}
+          progress={react.progress}
+        />
+        <SubjectCard
+          name="Database"
+          tasks={database.tasks}
+          Completed={database.completed}
+          progress={database.progress}
+        />
+        <SubjectCard
+          name="Computer Network"
+          tasks={network.tasks}
+          Completed={network.completed}
+          progress={network.progress}
+        />
       </div>
       <div>
         <AddTask setTask={setTask} />
@@ -54,11 +124,7 @@ const cppTasks = task.filter(
       <div>
         <h2>Tasks</h2>
         {task.map((task, index) => (
-          <TaskCard 
-           key={index}
-           task={task}
-           setTask={setTask} 
-           index={index} />
+          <TaskCard key={index} task={task} setTask={setTask} index={index} />
         ))}
       </div>
     </div>
